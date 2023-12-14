@@ -1,17 +1,17 @@
 #include<bits/stdc++.h>
 using namespace std;
-list<long long int> a1;
-map<long long int,long long int> sts;
+list<uint64_t> a1;
+map<uint64_t,uint64_t> sts;
 void seedtosoil(string s)
 {
-    vector<long long int> a(3);
-    for(int i=0; i<3; i++)
-    {
-        a[i]=stoull(s);
-        int k = s.find(" ");
-        if(k != -1)
-        s = s.substr(k+1, s.length());
-    }
+    vector<uint64_t> a(3);
+        istringstream stream(s);
+        uint64_t num;
+        int i=0;
+        while(stream>>num)
+        {
+        a[i++] = num;
+        }
     for( int i=0; i<a[2]; i++)
     {
         sts.emplace(a[1]+i,a[0]+i);
@@ -19,17 +19,11 @@ void seedtosoil(string s)
 }
 void findseed(string s)
 {
-    int k;
-    while(true)
+    istringstream stream(s);
+    uint64_t num;
+    while(stream>>num)
     {
-        k = s.find(" ");
-        if(k!= -1)
-        {
-        s = s.substr(k+1 , s.length());
-        }
-        else 
-        return;
-        a1.push_back(stoull(s));
+        a1.emplace_back(num);
     }
 }
 void replace()
@@ -44,25 +38,26 @@ int main()
 {
     string seed, seed1;
     getline(cin, seed);
+    seed = seed.substr(seed.find(" ")+1, seed.length());
     findseed(seed);
-    getline(cin, seed1);
-    getline(cin, seed1);
-    getline(cin, seed1);
+    int q= 7;
+    getline(cin , seed1);
+    getline(cin,seed1);
     while(true)
     {
-        if(seed1!=".")
+        getline(cin, seed1);
+        if(!seed1.empty())
         {
         seedtosoil(seed1);
-        getline(cin, seed1);
         }
         else
         {
         replace();
+        for(auto it:sts)
         sts.clear();
-        getline(cin, seed1);
-        if(seed1 == ".")
+        getline(cin,seed1);
+        if(seed1.empty())
         break;
-        getline(cin, seed1);
         }
     }
     a1.sort();
